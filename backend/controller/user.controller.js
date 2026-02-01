@@ -1,6 +1,7 @@
 import { response } from "../utils/responseHandler.js";
 import * as AuthService from '../services/auth.service.js';
 import { generateToken } from '../utils/generateToken.js';
+import UserModel from "../model/user.model.js";
 
 // send otp
 // export const sentOTP = async (req, res) => {
@@ -110,3 +111,25 @@ export const verifyOtp = async (req, res) => {
 		return response(res, status, error.message || 'Internal Server Error');
 	}
 };
+
+//update profile 
+
+export const updateProfile = async(req, res)=>{
+const {userName, agreed, about} = req.body;
+	const userId = req.id;
+
+try {
+	let user = await UserModel.findOne(userId);
+	const file = req.file;
+	if(file){
+		// const uploadResul = 
+		// user.profile.picture = 
+	}
+} catch (error) {
+	console.error('Update Profile Error:', error);
+		const status = error.statusCode || 500;
+		return response(res, status, error.message || 'Internal Server Error');
+}
+
+
+}

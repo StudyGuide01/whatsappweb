@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
 
 	// REAL-TIME & PRESENCE (See Note below on Scaling)
 	presence: {
-		lastSeen: { type: Date, default: Date.now }, isOnline: { type: Boolean, default: false }, socketId: { type: String, select: false } // Internal use for routing
+		lastSeen: { type: Date, default: Date.now }, isOnline: { type: Boolean, default: false },agreed:{type:Boolean}, socketId: { type: String, select: false } // Internal use for routing
 	},
 
 	// PRIVACY SETTINGS (Critical for Chat Apps)
