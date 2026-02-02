@@ -112,24 +112,261 @@ export const verifyOtp = async (req, res) => {
 	}
 };
 
+
+
+import asyncHandler from 'express-async-handler';
+// import UserModel from '../models/User.js';
+import cloudinaryService from '../services/cloudinaryService.js';
+import { 
+  successResponse, 
+  errorResponse, 
+  validationErrorResponse 
+} from '../utils/responseHandler.js';
+import { validateProfileUpdate } from '../utils/validators/profileValidator.js';
+import { logger } from '../utils/logger.js';
+
+export const updateProfile = asyncHandler(async (req, res) => {
+  const userId = req.userId;
+
+
+  // Validate input
+  const { error, value: validatedData } = validateProfileUpdate(req.body);
+
+  
+  if (error) {
+    logger.warn('Profile update validation failed', { 
+      userId, 
+      errors: error.details 
+    });
+    return validationErrorResponse(res, error.details);
+  }
+
+  try {
+    // Find user
+    const user = await UserModel.findById(userId).select('-password');
+
+
+    if (!user) {
+      logger.warn(`User not found for profile update: ${userId}`);
+      return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
+    }
+
+    let profilePictureData = null;
+// NEW (Schema ke according):
+const oldProfilePicture = user.profile?.picture; // URL ke liye
+const oldPublicId = user.profile?.filePublicId; // PublicId ke liye
+
+
+    // Handle file upload if present
+ if (req.file) {
+  try {
+    logger.info(`Processing file upload for user: ${userId}`);
+    
+    profilePictureData = await cloudinaryService.uploadFile(req.file.path, {
+      folder: `user-profiles/${userId}`,
+      public_id: `profile-${Date.now()}`,
+      transformation: [
+        { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+        { quality: 'auto:best' }
+      ]
+    });
+
+    // CORRECTION: oldProfilePicture mein URL hai, lekin humein publicId chahiye
+    const oldPublicId = user.profile?.filePublicId; // Schema ke hisaab se
+    
+    // Delete old profile picture from Cloudinary USING PUBLIC_ID
+    if (oldPublicId) {
+      await cloudinaryService.deleteFile(oldPublicId)
+        .catch(err => logger.error('Failed to delete old profile picture:', err));
+    }
+
+  } catch (uploadError) {
+    console.log(uploadError);
+    logger.error('File upload failed:', { userId, error: uploadError.message });
+    throw new Error(`Failed to upload profile picture: ${uploadError.message}`);
+  }
+}
+
+    // Update user fields
+    const updateFields = {};
+
+
+    
+    if (validatedData.userName) {
+      // Check if username is already taken
+      const existingUser = await UserModel.findOne({ 
+        userName: validatedData.userName, 
+        _id: { $ne: userId } 
+      });
+      
+      if (existingUser) {
+        return errorResponse(res, 'Username already taken', 409, 'USERNAME_EXISTS');
+      }
+      updateFields.userName = validatedData.userName;
+    }
+
+    // Build profile update object
+    const profileUpdate = {};
+
+
+if (profilePictureData) {
+  profileUpdate.picture = profilePictureData.url; 
+  profileUpdate.filePublicId = profilePictureData.public_id; // ADD THIS LINE
+} else if (validatedData.profilePicture) {
+  profileUpdate.picture = validatedData.profilePicture;
+  // Agar URL se aaya to publicId nahi hoga
+  profileUpdate.filePublicId = ""; // Clear old publicId
+}
+
+if (validatedData.about !== undefined) {
+  profileUpdate.about = validatedData.about;
+}    
+   
+
+//     if (profilePictureData) {
+//   profileUpdate.picture = profilePictureData.url; 
+// } else if (validatedData.profilePicture) {
+//   profileUpdate.picture = validatedData.profilePicture; 
+// }
+
+//     if (validatedData.about !== undefined) {
+//       profileUpdate.about = validatedData.about;
+//     }
+
+
+
+    if (validatedData.agreed !== undefined) {
+  		user.presence.agreed = validatedData.agreed;
+    }
+
+    if (validatedData.skills) {
+      profileUpdate.skills = validatedData.skills;
+    }
+
+    if (validatedData.socialLinks) {
+      profileUpdate.socialLinks = {
+        ...user.profile?.socialLinks,
+        ...validatedData.socialLinks
+      };
+    }
+
+    // Only update if there are changes
+    if (Object.keys(updateFields).length > 0) {
+      Object.assign(user, updateFields);
+    }
+
+    if (Object.keys(profileUpdate).length > 0) {
+      user.profile = { ...user.profile, ...profileUpdate };
+      user.profile.updatedAt = new Date();
+    }
+
+    // Add update timestamp
+    user.updatedAt = new Date();
+
+    // Save user
+    await user.save();
+
+    // Prepare response data (exclude sensitive info)
+    const userResponse = user.toObject();
+    delete userResponse.password;
+    delete userResponse.__v;
+
+    logger.info(`Profile updated successfully for user: ${userId}`);
+
+    return successResponse(
+      res,
+      'Profile updated successfully',
+      {
+        user: userResponse,
+        changes: {
+          profilePictureUpdated: !!profilePictureData || !!validatedData.profilePicture,
+          fieldsUpdated: Object.keys({ ...updateFields, ...profileUpdate })
+        }
+      },
+      200
+    );
+
+  } catch (error) {
+    logger.error('Profile update error:', {
+      userId,
+      error: error.message,
+      stack: error.stack
+    });
+
+    // Handle specific errors
+    if (error.code === 11000) {
+      return errorResponse(res, 'Username already exists', 409, 'DUPLICATE_USERNAME');
+    }
+
+    return errorResponse(
+      res,
+      process.env.NODE_ENV === 'production' 
+        ? 'Failed to update profile' 
+        : error.message,
+      500,
+      'UPDATE_PROFILE_ERROR'
+    );
+  }
+});
+
+
+
+export const logout = asyncHandler(async (req, res)=>{
+	try {
+		res.cookie('auth_token',"",{expires: new Date(0)});
+		return response(res,200,'user logout successfully');
+	} catch (error) {
+		console.log(error);
+		return response(res, 500 ,'Internal server error');
+	}
+})
+
+// Additional profile-related controllers
+export const getProfile = asyncHandler(async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const user = await UserModel.findById(userId)
+      .select('-password -__v -createdAt -updatedAt')
+      .lean();
+
+    if (!user) {
+      return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
+    }
+
+    return successResponse(res, 'Profile retrieved successfully', { user });
+  } catch (error) {
+    logger.error('Get profile error:', error);
+    return errorResponse(res, 'Failed to retrieve profile', 500, 'GET_PROFILE_ERROR');
+  }
+});
+
+
 //update profile 
 
-export const updateProfile = async(req, res)=>{
-const {userName, agreed, about} = req.body;
-	const userId = req.id;
+// export const updateProfile = async(req, res)=>{
+// const {userName, agreed, about} = req.body;
+// 	const userId = req.id;
 
-try {
-	let user = await UserModel.findOne(userId);
-	const file = req.file;
-	if(file){
-		// const uploadResul = 
-		// user.profile.picture = 
-	}
-} catch (error) {
-	console.error('Update Profile Error:', error);
-		const status = error.statusCode || 500;
-		return response(res, status, error.message || 'Internal Server Error');
-}
+// try {
+// 	let user = await UserModel.findOne(userId);
+// 	const file = req.file;
+// 	if(file){
+// 		const uploadResult =  uploadFileToCloudinary(file);
+// 		user.profile.picture = uploadResult.secure_url;
+// 	}else if(req.body.profilePicture){
+// 		user.profile.picture = req.body.profilePicture;
+// 	}
+// 	if(userName) user.userName = userName;
+// 	if(agreed) user.profile.agreed = agreed;
+// 	if(about) user.profile.about = about;
+// 	user.save();
+// 	return response(res, 200, 'user profile updated successfully', user);
+// } catch (error) {
+// 	console.error('Update Profile Error:', error);
+// 		const status = error.statusCode || 500;
+// 		return response(res, status, error.message || 'Internal Server Error');
+// }
 
 
-}
+// }

@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
 	// PROFILE
 	profile: {
-		picture: { type: String, default: "" }, about: { type: String, maxLength: 150 }, locale: { type: String, default: 'en' }, timezone: { type: String }
+		picture: { type: String, default: "" }, about: { type: String, maxLength: 150 },filePublicId: { type: String }, locale: { type: String, default: 'en' }, timezone: { type: String }
 	},
 
 	// REAL-TIME & PRESENCE (See Note below on Scaling)

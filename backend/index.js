@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRouter from './routes/auth.router.js';
+import profileRouter from './routes/profileRoutes.js';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors());
 
 //set route middleware
 app.use('/api/auth', authRouter);
+app.use('/api/auth', profileRouter);
 
 /* ----------- Middleware ---------------- */
 
