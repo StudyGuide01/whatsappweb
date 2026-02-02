@@ -18,10 +18,7 @@ export const updateProfileSchema = Joi.object({
   about: Joi.string()
     .max(500)
     .allow('', null),
-  
-  profilePicture: Joi.string()
-    .uri()
-    .allow('', null),
+
   
   skills: Joi.array()
     .items(Joi.string().max(50))

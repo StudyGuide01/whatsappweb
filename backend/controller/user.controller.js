@@ -134,17 +134,13 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
   
   if (error) {
-    logger.warn('Profile update validation failed', { 
-      userId, 
-      errors: error.details 
-    });
+    logger.warn('Profile update validation failed', { userId, errors: error.details });
     return validationErrorResponse(res, error.details);
   }
 
   try {
-    // Find user
-    const user = await UserModel.findById(userId).select('-password');
 
+    const user = await UserModel.findById(userId).select('-password');
 
     if (!user) {
       logger.warn(`User not found for profile update: ${userId}`);
@@ -152,15 +148,16 @@ export const updateProfile = asyncHandler(async (req, res) => {
     }
 
     let profilePictureData = null;
-// NEW (Schema ke according):
-const oldProfilePicture = user.profile?.picture; // URL ke liye
-const oldPublicId = user.profile?.filePublicId; // PublicId ke liye
+    const oldProfilePicture = user.profile?.picture; 
+    const oldPublicId = user.profile?.filePublicId; 
+
 
 
     // Handle file upload if present
  if (req.file) {
   try {
     logger.info(`Processing file upload for user: ${userId}`);
+
     
     profilePictureData = await cloudinaryService.uploadFile(req.file.path, {
       folder: `user-profiles/${userId}`,
@@ -171,10 +168,10 @@ const oldPublicId = user.profile?.filePublicId; // PublicId ke liye
       ]
     });
 
-    // CORRECTION: oldProfilePicture mein URL hai, lekin humein publicId chahiye
-    const oldPublicId = user.profile?.filePublicId; // Schema ke hisaab se
+
+    const oldPublicId = user.profile?.filePublicId; 
+
     
-    // Delete old profile picture from Cloudinary USING PUBLIC_ID
     if (oldPublicId) {
       await cloudinaryService.deleteFile(oldPublicId)
         .catch(err => logger.error('Failed to delete old profile picture:', err));
@@ -187,13 +184,8 @@ const oldPublicId = user.profile?.filePublicId; // PublicId ke liye
   }
 }
 
-    // Update user fields
     const updateFields = {};
-
-
-    
     if (validatedData.userName) {
-      // Check if username is already taken
       const existingUser = await UserModel.findOne({ 
         userName: validatedData.userName, 
         _id: { $ne: userId } 
@@ -211,11 +203,10 @@ const oldPublicId = user.profile?.filePublicId; // PublicId ke liye
 
 if (profilePictureData) {
   profileUpdate.picture = profilePictureData.url; 
-  profileUpdate.filePublicId = profilePictureData.public_id; // ADD THIS LINE
+  profileUpdate.filePublicId = profilePictureData.publicId; 
 } else if (validatedData.profilePicture) {
   profileUpdate.picture = validatedData.profilePicture;
-  // Agar URL se aaya to publicId nahi hoga
-  profileUpdate.filePublicId = ""; // Clear old publicId
+  profileUpdate.filePublicId = ""; 
 }
 
 if (validatedData.about !== undefined) {
@@ -223,15 +214,7 @@ if (validatedData.about !== undefined) {
 }    
    
 
-//     if (profilePictureData) {
-//   profileUpdate.picture = profilePictureData.url; 
-// } else if (validatedData.profilePicture) {
-//   profileUpdate.picture = validatedData.profilePicture; 
-// }
 
-//     if (validatedData.about !== undefined) {
-//       profileUpdate.about = validatedData.about;
-//     }
 
 
 
@@ -239,16 +222,7 @@ if (validatedData.about !== undefined) {
   		user.presence.agreed = validatedData.agreed;
     }
 
-    if (validatedData.skills) {
-      profileUpdate.skills = validatedData.skills;
-    }
-
-    if (validatedData.socialLinks) {
-      profileUpdate.socialLinks = {
-        ...user.profile?.socialLinks,
-        ...validatedData.socialLinks
-      };
-    }
+    
 
     // Only update if there are changes
     if (Object.keys(updateFields).length > 0) {
@@ -260,10 +234,8 @@ if (validatedData.about !== undefined) {
       user.profile.updatedAt = new Date();
     }
 
-    // Add update timestamp
     user.updatedAt = new Date();
 
-    // Save user
     await user.save();
 
     // Prepare response data (exclude sensitive info)
@@ -293,7 +265,6 @@ if (validatedData.about !== undefined) {
       stack: error.stack
     });
 
-    // Handle specific errors
     if (error.code === 11000) {
       return errorResponse(res, 'Username already exists', 409, 'DUPLICATE_USERNAME');
     }

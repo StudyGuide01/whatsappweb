@@ -102,3 +102,58 @@
 {"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770050987880-801060394.jpg","service":"profile-api","timestamp":"2026-02-02 22:19:47"}
 {"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770050987889","service":"profile-api","timestamp":"2026-02-02 22:19:52"}
 {"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 22:19:52"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:04:24"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:04:24"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:06:43"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:06:43"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:14:50"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:14:50"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:14:50"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:16:41"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:16:41"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:16:41"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770054401235-432577613.jpg","service":"profile-api","timestamp":"2026-02-02 23:16:41"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770054401261","service":"profile-api","timestamp":"2026-02-02 23:16:46"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:18:36"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:18:36"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:18:36"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770054516908-992705350.jpg","service":"profile-api","timestamp":"2026-02-02 23:18:36"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770054516935","service":"profile-api","timestamp":"2026-02-02 23:18:45"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:19:36"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:19:36"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:19:36"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770054576402-934708439.jpg","service":"profile-api","timestamp":"2026-02-02 23:19:36"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770054576426","service":"profile-api","timestamp":"2026-02-02 23:19:40"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:26:22"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:26:22"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:26:22"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770054982617-946265518.jpg","service":"profile-api","timestamp":"2026-02-02 23:26:22"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770054982642","service":"profile-api","timestamp":"2026-02-02 23:26:28"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:27:51"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:27:51"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:27:51"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770055071925-930194602.jpg","service":"profile-api","timestamp":"2026-02-02 23:27:51"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770055071953","service":"profile-api","timestamp":"2026-02-02 23:27:56"}
+{"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:27:56"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:29:15"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:29:15"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:29:15"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770055155069-382394479.jpg","service":"profile-api","timestamp":"2026-02-02 23:29:15"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770055155079","service":"profile-api","timestamp":"2026-02-02 23:29:19"}
+{"level":"error","message":"Cloudinary delete error: Failed to delete file: not found","service":"profile-api","stack":"Error: Failed to delete file: not found\n    at CloudinaryService.deleteFile (file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/services/cloudinaryService.js:83:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/controller/user.controller.js:176:7","timestamp":"2026-02-02 23:29:19"}
+{"level":"error","message":"Failed to delete old profile picture: Failed to delete file: Failed to delete file: not found","service":"profile-api","stack":"Error: Failed to delete file: Failed to delete file: not found\n    at CloudinaryService.deleteFile (file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/services/cloudinaryService.js:87:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/controller/user.controller.js:176:7","timestamp":"2026-02-02 23:29:19"}
+{"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:29:19"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:29:51"}
+{"level":"info","message":"File validated: javed khan.jpeg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:29:51"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:29:51"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770055191303-947060048.jpeg","service":"profile-api","timestamp":"2026-02-02 23:29:51"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770055191310","service":"profile-api","timestamp":"2026-02-02 23:29:55"}
+{"level":"info","message":"File deleted from Cloudinary: user-profiles/697e42f94855f2a5bdffb215/profile-1770055155079","service":"profile-api","timestamp":"2026-02-02 23:29:55"}
+{"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:29:55"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-02 23:40:05"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-02-02 23:40:05"}
+{"level":"info","message":"Processing file upload for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:40:05"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1770055805539-904556594.jpg","service":"profile-api","timestamp":"2026-02-02 23:40:05"}
+{"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770055805565","service":"profile-api","timestamp":"2026-02-02 23:40:12"}
+{"level":"info","message":"File deleted from Cloudinary: user-profiles/697e42f94855f2a5bdffb215/profile-1770055191310","service":"profile-api","timestamp":"2026-02-02 23:40:13"}
+{"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:40:13"}
