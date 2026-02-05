@@ -324,16 +324,29 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 
 		const userWithConversation = await Promise.all(
 			formattedUsers.map(async (user) => {
-				const conversation = await ConversationModel.findOne({
-					participants: { $all: [loggedInUser, formattedUsers?._id] }
-				})
-			})
-		)
 
-		return res.json(userWithConversation);
+				const conversation = await ConversationModel
+					.findOne({
+						participants: { $all: [loggedInUser, user._id] }
+					})
+					.populate({ path: 'lastMessage' });
+
+				return {
+					...user,
+					conversation: conversation | null
+				};
+
+			})
+		);
+
+		//select content createdAt sender recevier
+
+
+		return response(res, 200, 'user reviced successfully', userWithConversation);
+
 	} catch (error) {
 		console.log('Error While find all users');
-		return response
+		return response(res, 500, 'Internal server error');
 	}
 })
 
