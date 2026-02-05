@@ -117,203 +117,258 @@ export const verifyOtp = async (req, res) => {
 import asyncHandler from 'express-async-handler';
 // import UserModel from '../models/User.js';
 import cloudinaryService from '../services/cloudinaryService.js';
-import { 
-  successResponse, 
-  errorResponse, 
-  validationErrorResponse 
+import {
+	successResponse,
+	errorResponse,
+	validationErrorResponse
 } from '../utils/responseHandler.js';
 import { validateProfileUpdate } from '../utils/validators/profileValidator.js';
 import { logger } from '../utils/logger.js';
+import ConversationModel from "../model/conversation.model.js";
 
 export const updateProfile = asyncHandler(async (req, res) => {
-  const userId = req.userId;
+	const userId = req.userId;
 
 
-  // Validate input
-  const { error, value: validatedData } = validateProfileUpdate(req.body);
-
-  
-  if (error) {
-    logger.warn('Profile update validation failed', { userId, errors: error.details });
-    return validationErrorResponse(res, error.details);
-  }
-
-  try {
-
-    const user = await UserModel.findById(userId).select('-password');
-
-    if (!user) {
-      logger.warn(`User not found for profile update: ${userId}`);
-      return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
-    }
-
-    let profilePictureData = null;
-    const oldProfilePicture = user.profile?.picture; 
-    const oldPublicId = user.profile?.filePublicId; 
+	// Validate input
+	const { error, value: validatedData } = validateProfileUpdate(req.body);
 
 
+	if (error) {
+		logger.warn('Profile update validation failed', { userId, errors: error.details });
+		return validationErrorResponse(res, error.details);
+	}
 
-    // Handle file upload if present
- if (req.file) {
-  try {
-    logger.info(`Processing file upload for user: ${userId}`);
+	try {
 
-    
-    profilePictureData = await cloudinaryService.uploadFile(req.file.path, {
-      folder: `user-profiles/${userId}`,
-      public_id: `profile-${Date.now()}`,
-      transformation: [
-        { width: 400, height: 400, crop: 'fill', gravity: 'face' },
-        { quality: 'auto:best' }
-      ]
-    });
+		const user = await UserModel.findById(userId).select('-password');
 
+		if (!user) {
+			logger.warn(`User not found for profile update: ${userId}`);
+			return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
+		}
 
-    const oldPublicId = user.profile?.filePublicId; 
-
-    
-    if (oldPublicId) {
-      await cloudinaryService.deleteFile(oldPublicId)
-        .catch(err => logger.error('Failed to delete old profile picture:', err));
-    }
-
-  } catch (uploadError) {
-    console.log(uploadError);
-    logger.error('File upload failed:', { userId, error: uploadError.message });
-    throw new Error(`Failed to upload profile picture: ${uploadError.message}`);
-  }
-}
-
-    const updateFields = {};
-    if (validatedData.userName) {
-      const existingUser = await UserModel.findOne({ 
-        userName: validatedData.userName, 
-        _id: { $ne: userId } 
-      });
-      
-      if (existingUser) {
-        return errorResponse(res, 'Username already taken', 409, 'USERNAME_EXISTS');
-      }
-      updateFields.userName = validatedData.userName;
-    }
-
-    // Build profile update object
-    const profileUpdate = {};
-
-
-if (profilePictureData) {
-  profileUpdate.picture = profilePictureData.url; 
-  profileUpdate.filePublicId = profilePictureData.publicId; 
-} else if (validatedData.profilePicture) {
-  profileUpdate.picture = validatedData.profilePicture;
-  profileUpdate.filePublicId = ""; 
-}
-
-if (validatedData.about !== undefined) {
-  profileUpdate.about = validatedData.about;
-}    
-   
+		let profilePictureData = null;
+		const oldProfilePicture = user.profile?.picture;
+		const oldPublicId = user.profile?.filePublicId;
 
 
 
+		// Handle file upload if present
+		if (req.file) {
+			try {
+				logger.info(`Processing file upload for user: ${userId}`);
 
 
-    if (validatedData.agreed !== undefined) {
-  		user.presence.agreed = validatedData.agreed;
-    }
+				profilePictureData = await cloudinaryService.uploadFile(req.file.path, {
+					folder: `user-profiles/${userId}`,
+					public_id: `profile-${Date.now()}`,
+					transformation: [
+						{ width: 400, height: 400, crop: 'fill', gravity: 'face' },
+						{ quality: 'auto:best' }
+					]
+				});
 
-    
 
-    // Only update if there are changes
-    if (Object.keys(updateFields).length > 0) {
-      Object.assign(user, updateFields);
-    }
+				const oldPublicId = user.profile?.filePublicId;
 
-    if (Object.keys(profileUpdate).length > 0) {
-      user.profile = { ...user.profile, ...profileUpdate };
-      user.profile.updatedAt = new Date();
-    }
 
-    user.updatedAt = new Date();
+				if (oldPublicId) {
+					await cloudinaryService.deleteFile(oldPublicId)
+						.catch(err => logger.error('Failed to delete old profile picture:', err));
+				}
 
-    await user.save();
+			} catch (uploadError) {
+				console.log(uploadError);
+				logger.error('File upload failed:', { userId, error: uploadError.message });
+				throw new Error(`Failed to upload profile picture: ${uploadError.message}`);
+			}
+		}
 
-    // Prepare response data (exclude sensitive info)
-    const userResponse = user.toObject();
-    delete userResponse.password;
-    delete userResponse.__v;
+		const updateFields = {};
+		if (validatedData.userName) {
+			const existingUser = await UserModel.findOne({
+				userName: validatedData.userName,
+				_id: { $ne: userId }
+			});
 
-    logger.info(`Profile updated successfully for user: ${userId}`);
+			if (existingUser) {
+				return errorResponse(res, 'Username already taken', 409, 'USERNAME_EXISTS');
+			}
+			updateFields.userName = validatedData.userName;
+		}
 
-    return successResponse(
-      res,
-      'Profile updated successfully',
-      {
-        user: userResponse,
-        changes: {
-          profilePictureUpdated: !!profilePictureData || !!validatedData.profilePicture,
-          fieldsUpdated: Object.keys({ ...updateFields, ...profileUpdate })
-        }
-      },
-      200
-    );
+		// Build profile update object
+		const profileUpdate = {};
 
-  } catch (error) {
-    logger.error('Profile update error:', {
-      userId,
-      error: error.message,
-      stack: error.stack
-    });
 
-    if (error.code === 11000) {
-      return errorResponse(res, 'Username already exists', 409, 'DUPLICATE_USERNAME');
-    }
+		if (profilePictureData) {
+			profileUpdate.picture = profilePictureData.url;
+			profileUpdate.filePublicId = profilePictureData.publicId;
+		} else if (validatedData.profilePicture) {
+			profileUpdate.picture = validatedData.profilePicture;
+			profileUpdate.filePublicId = "";
+		}
 
-    return errorResponse(
-      res,
-      process.env.NODE_ENV === 'production' 
-        ? 'Failed to update profile' 
-        : error.message,
-      500,
-      'UPDATE_PROFILE_ERROR'
-    );
-  }
+		if (validatedData.about !== undefined) {
+			profileUpdate.about = validatedData.about;
+		}
+
+
+
+
+
+
+		if (validatedData.agreed !== undefined) {
+			user.presence.agreed = validatedData.agreed;
+		}
+
+
+
+		// Only update if there are changes
+		if (Object.keys(updateFields).length > 0) {
+			Object.assign(user, updateFields);
+		}
+
+		if (Object.keys(profileUpdate).length > 0) {
+			user.profile = { ...user.profile, ...profileUpdate };
+			user.profile.updatedAt = new Date();
+		}
+
+		user.updatedAt = new Date();
+
+		await user.save();
+
+		// Prepare response data (exclude sensitive info)
+		const userResponse = user.toObject();
+		delete userResponse.password;
+		delete userResponse.__v;
+
+		logger.info(`Profile updated successfully for user: ${userId}`);
+
+		return successResponse(
+			res,
+			'Profile updated successfully',
+			{
+				user: userResponse,
+				changes: {
+					profilePictureUpdated: !!profilePictureData || !!validatedData.profilePicture,
+					fieldsUpdated: Object.keys({ ...updateFields, ...profileUpdate })
+				}
+			},
+			200
+		);
+
+	} catch (error) {
+		logger.error('Profile update error:', {
+			userId,
+			error: error.message,
+			stack: error.stack
+		});
+
+		if (error.code === 11000) {
+			return errorResponse(res, 'Username already exists', 409, 'DUPLICATE_USERNAME');
+		}
+
+		return errorResponse(
+			res,
+			process.env.NODE_ENV === 'production'
+				? 'Failed to update profile'
+				: error.message,
+			500,
+			'UPDATE_PROFILE_ERROR'
+		);
+	}
 });
 
 
+//checkauthenticat
 
-export const logout = asyncHandler(async (req, res)=>{
+export const checkAuthenticat = asyncHandler(async (req, res) => {
 	try {
-		res.cookie('auth_token',"",{expires: new Date(0)});
-		return response(res,200,'user logout successfully');
+		const userId = req.userId;
+		if (!userId) {
+			return response(res, 401, 'User unauthorized');
+		}
+		const user = await UserModel.findById(userId);
+		if (!user) {
+			return response(res, 404, 'user not found');
+		}
+
+		return response(res, 200, 'user retrived and allow to use whatsapp', user);
+	} catch (error) {
+		console.log('Error while check autherization access', error);
+		return response(res, 500, 'Internal server error');
+	}
+
+})
+
+
+//get all users
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+	try {
+		const loggedInUser = req.userId;
+
+		const users = await UserModel.find({ _id: { $ne: loggedInUser } }).lean();
+		const formattedUsers = users.map(user => ({
+			_id: user._id,
+			userName: user.userName,
+			profilePicture: user.profile?.picture,
+			lastSeen: user.presence?.lastSeen,
+			isOnline: user.presence?.isOnline,
+			about: user.profile?.about,
+			phoneNumber: user.phoneNumber,
+			countryCode: user.countryCode
+		}));
+
+		const userWithConversation = await Promise.all(
+			formattedUsers.map(async (user) => {
+				const conversation = await ConversationModel.findOne({
+					participants: { $all: [loggedInUser, formattedUsers?._id] }
+				})
+			})
+		)
+
+		return res.json(userWithConversation);
+	} catch (error) {
+		console.log('Error While find all users');
+		return response
+	}
+})
+
+export const logout = asyncHandler(async (req, res) => {
+	try {
+		res.cookie('auth_token', "", { expires: new Date(0) });
+		return response(res, 200, 'user logout successfully');
 	} catch (error) {
 		console.log(error);
-		return response(res, 500 ,'Internal server error');
+		return response(res, 500, 'Internal server error');
 	}
 })
 
 // Additional profile-related controllers
 export const getProfile = asyncHandler(async (req, res) => {
-  const userId = req.userId;
+	const userId = req.userId;
 
-  try {
-    const user = await UserModel.findById(userId)
-      .select('-password -__v -createdAt -updatedAt')
-      .lean();
+	try {
+		const user = await UserModel.findById(userId)
+			.select('-password -__v -createdAt -updatedAt')
+			.lean();
 
-    if (!user) {
-      return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
-    }
+		if (!user) {
+			return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
+		}
 
-    return successResponse(res, 'Profile retrieved successfully', { user });
-  } catch (error) {
-    logger.error('Get profile error:', error);
-    return errorResponse(res, 'Failed to retrieve profile', 500, 'GET_PROFILE_ERROR');
-  }
+		return successResponse(res, 'Profile retrieved successfully', { user });
+	} catch (error) {
+		logger.error('Get profile error:', error);
+		return errorResponse(res, 'Failed to retrieve profile', 500, 'GET_PROFILE_ERROR');
+	}
 });
 
 
-//update profile 
+//update profile
 
 // export const updateProfile = async(req, res)=>{
 // const {userName, agreed, about} = req.body;
