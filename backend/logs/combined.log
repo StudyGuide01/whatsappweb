@@ -157,3 +157,6 @@
 {"level":"info","message":"File uploaded successfully: user-profiles/697e42f94855f2a5bdffb215/profile-1770055805565","service":"profile-api","timestamp":"2026-02-02 23:40:12"}
 {"level":"info","message":"File deleted from Cloudinary: user-profiles/697e42f94855f2a5bdffb215/profile-1770055191310","service":"profile-api","timestamp":"2026-02-02 23:40:13"}
 {"level":"info","message":"Profile updated successfully for user: 697e42f94855f2a5bdffb215","service":"profile-api","timestamp":"2026-02-02 23:40:13"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-04 19:54:39"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-04 19:55:04"}
+{"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-02-04 20:07:16"}

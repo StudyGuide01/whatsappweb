@@ -290,7 +290,32 @@ export const logout = asyncHandler(async (req, res)=>{
 		console.log(error);
 		return response(res, 500 ,'Internal server error');
 	}
-})
+});
+
+//check authenticated 
+
+export const checkAuthenticate = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return response(res, 401, 'User is unauthorized, please login before use this page');
+    }
+
+    const user = await UserModel.findById(userId).select('-password -__v').lean();
+
+    if (!user) {
+      return errorResponse(res, 'User not found', 404, 'USER_NOT_REGISTERED');
+    }
+
+    return successResponse(res,'User retrieved and allowed to use the app',{ user },200);
+  
+  } catch (error) {
+    logger.error('check authorization access error:', error);
+    return errorResponse(res, 'Failed to get app access', 500, 'APP_ACCESS_PROFILE_ERROR');}
+});
+
+
 
 // Additional profile-related controllers
 export const getProfile = asyncHandler(async (req, res) => {
