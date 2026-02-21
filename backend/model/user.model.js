@@ -4,7 +4,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const userSchema = new mongoose.Schema({
 	// IDENTITY & AUTH
-	phoneNumber: { type: String, unique: true, sparse: true, trim: true, index: true }, // Explicit indexing for faster lookups,
+	phoneNumber: { type: String, unique: true, sparse: true, trim: true, index: true },
 	countryCode: { type: String }, // Standardized (e.g., "+1", "+91")
 	userName: {
 		type: String, trim: true, index: { unique: true, sparse: true } // Sparse allows nulls while maintaining uniqueness
@@ -29,12 +29,12 @@ const userSchema = new mongoose.Schema({
 
 	// PROFILE
 	profile: {
-		picture: { type: String, default: "" }, about: { type: String, maxLength: 150 },filePublicId: { type: String }, locale: { type: String, default: 'en' }, timezone: { type: String }
+		picture: { type: String, default: "" }, about: { type: String, maxLength: 150 }, filePublicId: { type: String }, locale: { type: String, default: 'en' }, timezone: { type: String }
 	},
 
 	// REAL-TIME & PRESENCE (See Note below on Scaling)
 	presence: {
-		lastSeen: { type: Date, default: Date.now }, isOnline: { type: Boolean, default: false },agreed:{type:Boolean}, socketId: { type: String, select: false } // Internal use for routing
+		lastSeen: { type: Date, default: Date.now }, isOnline: { type: Boolean, default: false }, agreed: { type: Boolean }, socketId: { type: String, select: false } // Internal use for routing
 	},
 
 	// PRIVACY SETTINGS (Critical for Chat Apps)
