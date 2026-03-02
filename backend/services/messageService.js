@@ -9,6 +9,7 @@ export const senderService = async (data, file) => {
 	try {
 		const { senderId, receiverId, content } = data;
 
+		
 		// 1. Conversation find ya create
 		let conversation = await ConversationModel.findOne({
 			participants: { $all: [senderId, receiverId] },
@@ -64,7 +65,7 @@ export const senderService = async (data, file) => {
 			attachments.push({
 				url: uploadFile.secure_url,
 				fileType: fileType,
-				publicId: uploadFile.public_id || null
+				publicId: uploadFile.publicId || null
 			});
 		}
 

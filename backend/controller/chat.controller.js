@@ -6,7 +6,7 @@ import { response } from '../utils/responseHandler.js';
 
 export const sendMessage = asyncHandler(async (req, res) => {
 	try {
-		const { senderId, receiverId, content } = req.body;
+		const { senderId, receiverId, content, messageStatus } = req.body;
 		const file = req.file;
 
 		if (!senderId || !receiverId) {

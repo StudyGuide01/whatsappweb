@@ -329,11 +329,11 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 					.findOne({
 						participants: { $all: [loggedInUser, user._id] }
 					})
-					.populate({ path: 'lastMessage' });
+					.populate({ path: 'lastMessage' }).lean();
 
 				return {
 					...user,
-					conversation: conversation | null
+					conversation: conversation || null
 				};
 
 			})
