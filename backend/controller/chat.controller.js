@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import * as messageService from '../services/messageService.js';
 import { response } from '../utils/responseHandler.js';
 import ConversationModel from '../model/conversation.model.js';
+import MessageModel from '../model/message.model.js';
 
 // send message 
 
@@ -100,3 +101,48 @@ export const getAllConversation = asyncHandler(async (req, res) => {
         );
     }
 });
+
+//get messages for  a specific conversation
+
+export const  getMessage = asyncHandler(async (req, res)=>{
+
+    const {conversationId} = req.params;
+    const userId = userId;
+    try {
+        const conversation = await ConversationModel.findById(conversationId);
+
+        if(!conversation){
+            return response(res, 404, 'Conversation not found');
+        }
+
+        if(!conversation.participants.include(userId)){
+            return response(res, 403, ' not authorize to view this conversation');
+        }
+
+        const messages =  await MessageModel.find({conversation:conversation})
+        .populate('sender')
+        .populate('seenBy').sort("createdAt");
+
+        await MessageModel.updateMany({
+            conversation:conversationId,
+            receiverId: userId,
+            messageStatus:{$in:['send','delivered']},
+        },
+        {$set:{messageStatus:"read"}},
+    );
+
+
+    conversation.unreadCounts = 0;
+    await conversation.save();
+
+    return response(res, 200,'message retrived',messages);
+
+    } catch (error) {
+        console.error('Error while get message ', error);
+        return response(
+            res,
+            500,
+            'An internal server error occurred while retrieving messages'
+        );
+    }
+})

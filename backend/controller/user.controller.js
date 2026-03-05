@@ -134,6 +134,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 	const { error, value: validatedData } = validateProfileUpdate(req.body);
 
 
+
 	if (error) {
 		logger.warn('Profile update validation failed', { userId, errors: error.details });
 		return validationErrorResponse(res, error.details);
@@ -143,6 +144,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
 		const user = await UserModel.findById(userId).select('-password');
 
+
 		if (!user) {
 			logger.warn(`User not found for profile update: ${userId}`);
 			return errorResponse(res, 'User not found', 404, 'USER_NOT_FOUND');
@@ -151,6 +153,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 		let profilePictureData = null;
 		const oldProfilePicture = user.profile?.picture;
 		const oldPublicId = user.profile?.filePublicId;
+
 
 
 
@@ -168,7 +171,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
 						{ quality: 'auto:best' }
 					]
 				});
-
 
 				const oldPublicId = user.profile?.filePublicId;
 
@@ -213,10 +215,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
 		if (validatedData.about !== undefined) {
 			profileUpdate.about = validatedData.about;
 		}
-
-
-
-
 
 
 		if (validatedData.agreed !== undefined) {
@@ -314,6 +312,7 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 		const formattedUsers = users.map(user => ({
 			_id: user._id,
 			userName: user.userName,
+			email:user.email,
 			profilePicture: user.profile?.picture,
 			lastSeen: user.presence?.lastSeen,
 			isOnline: user.presence?.isOnline,

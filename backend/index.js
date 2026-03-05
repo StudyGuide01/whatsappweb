@@ -22,7 +22,7 @@ app.use(cors());
 //set route middleware
 app.use('/api/auth', authRouter);
 app.use('/api/auth', profileRouter);
-app.use('/api/auth/message', messageRouter);
+app.use('/api/message', messageRouter);
 
 /* ----------- Middleware ---------------- */
 

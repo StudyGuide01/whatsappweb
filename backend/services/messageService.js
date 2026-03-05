@@ -95,8 +95,8 @@ export const senderService = async (data, file) => {
 
 		// 5. Populated message return karo
 		const populatedMessage = await MessageModel.findById(message._id)
-			.populate('sender', 'userName profile')
-			.populate('seenBy.user', 'userName profile')
+			.populate('sender', 'userName profile.picture')
+			.populate('seenBy.user', 'userName profile.picture')
 			.populate('replyTo')
 			.lean();
 

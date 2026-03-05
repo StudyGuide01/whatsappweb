@@ -5,3 +5,48 @@
 {"level":"info","message":"User 697e42f94855f2a5bdffb215 authenticated successfully","service":"profile-api","timestamp":"2026-03-02 23:42:25"}
 {"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-02 23:45:57"}
 {"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-02 23:46:03"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:24:28"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:24:36"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:24:50"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:25:53"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:29:53"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-05 23:29:53"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:43:15"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-05 23:43:15"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:44:57"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-05 23:44:57"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:45:34"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-05 23:45:34"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-05 23:47:28"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-05 23:47:28"}
+{"level":"info","message":"Processing file upload for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-05 23:47:28"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1772734648611-826286214.jpg","service":"profile-api","timestamp":"2026-03-05 23:47:28"}
+{"level":"info","message":"File uploaded successfully: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772734648662","service":"profile-api","timestamp":"2026-03-05 23:47:34"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:01:05"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-06 00:01:05"}
+{"level":"info","message":"Processing file upload for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:01:05"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1772735465728-846717095.jpg","service":"profile-api","timestamp":"2026-03-06 00:01:05"}
+{"level":"info","message":"File uploaded successfully: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772735465782","service":"profile-api","timestamp":"2026-03-06 00:01:10"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:13:23"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-06 00:13:23"}
+{"level":"info","message":"Processing file upload for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:13:23"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1772736203028-129596196.jpg","service":"profile-api","timestamp":"2026-03-06 00:13:23"}
+{"level":"info","message":"File uploaded successfully: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772736203060","service":"profile-api","timestamp":"2026-03-06 00:13:28"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:13:45"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-06 00:13:45"}
+{"level":"info","message":"Processing file upload for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:13:45"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1772736225014-799247949.jpg","service":"profile-api","timestamp":"2026-03-06 00:13:45"}
+{"level":"info","message":"File uploaded successfully: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772736225026","service":"profile-api","timestamp":"2026-03-06 00:13:49"}
+{"level":"info","message":"Profile updated successfully for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:13:49"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:14:45"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-06 00:14:45"}
+{"level":"info","message":"Processing file upload for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:14:45"}
+{"level":"info","message":"Uploading file to Cloudinary: C:\\Users\\javed\\Desktop\\New folder\\whatsappweb\\backend\\uploads\\temp\\profilePicture-1772736285521-421112362.jpg","service":"profile-api","timestamp":"2026-03-06 00:14:45"}
+{"level":"info","message":"File uploaded successfully: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772736285529","service":"profile-api","timestamp":"2026-03-06 00:14:50"}
+{"level":"info","message":"File deleted from Cloudinary: user-profiles/69a5d39cf10f5949c47c06f1/profile-1772736225026","service":"profile-api","timestamp":"2026-03-06 00:14:51"}
+{"level":"info","message":"Profile updated successfully for user: 69a5d39cf10f5949c47c06f1","service":"profile-api","timestamp":"2026-03-06 00:14:51"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:35:50"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:36:23"}
+{"level":"info","message":"User 69a5d39cf10f5949c47c06f1 authenticated successfully","service":"profile-api","timestamp":"2026-03-06 00:37:04"}
+{"level":"info","message":"File validated: 117471.jpg, Type: image/jpeg","service":"profile-api","timestamp":"2026-03-06 00:37:04"}
+{"code":"ERR_INVALID_ARG_TYPE","level":"error","message":"Cloudinary upload error: The \"path\" argument must be of type string. Received an instance of Object","service":"profile-api","stack":"TypeError [ERR_INVALID_ARG_TYPE]: The \"path\" argument must be of type string. Received an instance of Object\n    at Object.extname (node:path:922:5)\n    at CloudinaryService.uploadFile (file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/services/cloudinaryService.js:28:21)\n    at Module.senderService (file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/services/messageService.js:46:47)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///C:/Users/javed/Desktop/New%20folder/whatsappweb/backend/controller/chat.controller.js:30:18","timestamp":"2026-03-06 00:37:04"}
