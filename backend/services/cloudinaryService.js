@@ -52,6 +52,49 @@ class CloudinaryService {
 		}
 	}
 
+	async uploadContentFile (filePath, options={}){
+try {
+		const defaultOptions = {
+				folder: 'content-files',
+				use_filename: true,
+				unique_filename: true,
+				overwrite: false,
+				resource_type: 'auto',
+			};
+
+				const uploadOptions = { ...defaultOptions, ...options };
+
+		
+			const ext = path.extname(filePath).toLowerCase();
+			if (['.mp4', '.webm', '.ogg', '.mov'].includes(ext)) {
+				uploadOptions.resource_type = 'video';
+				uploadOptions.transformation = [{ quality: 'auto:good' }];
+			}
+
+			logger.info(`Uploading file to Cloudinary: ${filePath}`);
+
+			const result = await this.cloudinary.uploader.upload(filePath, uploadOptions);
+			await fs.unlink(filePath).catch(() => {});
+
+
+			logger.info(`File uploaded successfully: ${result.public_id}`);
+
+				return {
+				url: result.secure_url,
+				publicId: result.public_id,
+				format: result.format,
+				bytes: result.bytes,
+				resourceType: result.resource_type
+			};
+
+} catch (error) {
+	console.log(error);
+	logger.error('Cloudinary upload error:', error);
+	throw new Error(`Failed to upload file: ${error.message}`);
+}}
+
+// end content file upload method
+
 	async uploadFromBuffer(buffer, originalName, options = {}) {
 		try {
 			const tempFilePath = path.join(process.cwd(), 'uploads', 'temp', `temp-${Date.now()}-${originalName}`);

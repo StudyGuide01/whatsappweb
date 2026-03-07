@@ -43,11 +43,11 @@ export const senderService = async (data, file) => {
 		let attachments = [];
 
 		if (file) {
-			const uploadFile = await cloudinaryService.uploadFile(file);
+			const uploadFile = await cloudinaryService.uploadContentFile(file.path);
 
-			if (!uploadFile?.secure_url) {
-				throw new Error('Failed to upload media');
-			}
+		if (!uploadFile?.url) {
+  throw new Error('Failed to upload media');
+}
 
 			// File type detect karo
 			let fileType = 'file';
@@ -62,11 +62,13 @@ export const senderService = async (data, file) => {
 				messageType = 'media';
 			}
 
+	
+
 			attachments.push({
-				url: uploadFile.secure_url,
-				fileType: fileType,
-				publicId: uploadFile.publicId || null
-			});
+  url: uploadFile.url,
+  fileType: fileType,
+  publicId: uploadFile.publicId || null
+});
 		}
 
 		// 3. Message create karo
