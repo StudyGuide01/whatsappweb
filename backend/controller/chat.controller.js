@@ -49,7 +49,7 @@ export const getAllConversation = asyncHandler(async (req, res) => {
         const conversations = await ConversationModel
             .find({ participants: userId })
             // Limit fields for performance and security
-            .select('lastMessage updatedAt createdAt') 
+            .select('lastMessage unreadCounts  updatedAt createdAt') 
             .populate({
                 path: 'participants',
                 select: 'userName profile.picture presence.isOnline presence.lastSeen'
@@ -68,21 +68,30 @@ export const getAllConversation = asyncHandler(async (req, res) => {
         // Transform data: Extract "the other person" and cleanup payload
         const formattedConversations = conversations
             .map((conv) => {
-                const otherParticipant = conv.participants.find(
-                    (p) => p._id.toString() !== userId.toString()
-                );
+
+            const myUnread = conv.unreadCounts.find(
+              u => u.user._id.toString() === userId.toString()
+            );
+            
+            const otherParticipant = conv.participants.find(
+                (p) => p._id.toString() !== userId.toString()
+            );
+
+            
 
                 // Remove the bulky participants array before sending to client
-                const { participants, ...rest } = conv;
+                const {unreadCounts, participants, ...rest } = conv;
 
                 return {
                     ...rest,
-                    participant: otherParticipant || null 
+                    participant: otherParticipant || null ,
+                    unreadCount: myUnread?.count || 0
                 };
             })
             // Optional: Filter out conversations that haven't started yet (no lastMessage)
             .filter(conv => conv.lastMessage !== null);
 
+            console.log(formattedConversations);
         return response(
             res,
             200,
@@ -104,45 +113,130 @@ export const getAllConversation = asyncHandler(async (req, res) => {
 
 //get messages for  a specific conversation
 
-export const  getMessage = asyncHandler(async (req, res)=>{
+export const getMessage = asyncHandler(async (req, res) => {
+    const { conversationId } = req.params;
+    const userId = req.userId;
 
-    const {conversationId} = req.params;
-    const userId = userId;
     try {
+        // 1. Conversation fetch
         const conversation = await ConversationModel.findById(conversationId);
 
-        if(!conversation){
+        if (!conversation) {
             return response(res, 404, 'Conversation not found');
         }
 
-        if(!conversation.participants.include(userId)){
-            return response(res, 403, ' not authorize to view this conversation');
+        // 2. Authorization check (safe way)
+        const isParticipant = conversation.participants.some(
+            p => p.toString() === userId.toString()
+        );
+
+        if (!isParticipant) {
+            return response(res, 403, 'Not authorized to view this conversation');
         }
 
-        const messages =  await MessageModel.find({conversation:conversation})
-        .populate('sender')
-        .populate('seenBy').sort("createdAt");
+        // 3. Get messages
+        const messages = await MessageModel.find({ conversation: conversationId })
+            .populate('sender', 'userName profile.picture')
+            .populate('seenBy.user', 'userName profile.picture')
+            .sort({ createdAt: 1 }) // oldest → newest
+            .lean();
 
-        await MessageModel.updateMany({
-            conversation:conversationId,
-            receiverId: userId,
-            messageStatus:{$in:['send','delivered']},
-        },
-        {$set:{messageStatus:"read"}},
-    );
+        // 4. Mark messages as read
+        await MessageModel.updateMany(
+            {
+                conversation: conversationId,
+                receiver: userId, 
+                messageStatus: { $in: ['send', 'delivered'] }
+            },
+            {
+                $set: { messageStatus: 'read' }
+            }
+        );
 
+        // 5. Reset unread count for current user (optimized)
+        await ConversationModel.updateOne(
+            { _id: conversationId, "unreadCounts.user": userId },
+            { $set: { "unreadCounts.$.count": 0 } }
+        );
 
-    conversation.unreadCounts = 0;
-    await conversation.save();
-
-    return response(res, 200,'message retrived',messages);
+        // 6. Response
+        return response(res, 200, 'Messages retrieved successfully', messages);
 
     } catch (error) {
-        console.error('Error while get message ', error);
+        console.error(`[GetMessageError] Conversation: ${conversationId}`, error);
+
         return response(
             res,
             500,
             'An internal server error occurred while retrieving messages'
         );
     }
-})
+});
+
+/* mark as read  */
+
+
+/// ******************************* ISME ENSURE KANRA HE KE FROTNEND NE KONSE MESSAGE READ KARE FIR USKE HISAB SE INCREMENT DECREMENT KARNA HE COUNT ME =>>. YE BAD ME KARN AHE FREONTEND BANNE PAR
+
+export const markAsRead = async (req, res) => {
+    try {
+        const { messageId } = req.body;
+        const userId = req.userId;
+
+        // 1. Get unread messages
+        const messages = await MessageModel.find({
+            _id: { $in: messageId },
+            receiver: userId,
+            messageStatus: { $ne: 'read' }
+        });
+
+        // 2. Mark as read
+        await MessageModel.updateMany(
+            { _id: { $in: messageId }, receiver: userId },
+            { $set: { messageStatus: 'read' } }
+        );
+
+        // 3. Update unread count
+        const readCount = messages.length;
+
+        if (readCount > 0) {
+            await ConversationModel.updateOne(
+                { _id: messages[0].conversation, "unreadCounts.user": userId },
+                { $inc: { "unreadCounts.$.count": -readCount } }
+            );
+        }
+
+        return response(res, 200, "Messages marked as read", messages);
+
+    } catch (error) {
+        console.error('Error while marking messages read', error);
+        return response(res, 500, 'Internal server error');
+    }
+};
+
+export const  deleteMessag = async(req, res)=>{
+    try {
+        const {messageId} =  req.params;
+        const {userId} = req.userId
+
+        const message = await MessageModel.findById(messageId);
+        if(!message){
+            return response(res, 404, "message not found to delete ")
+        }
+
+        if(message.sender.toString() !== userId){
+            return response(res, 403, 'not authorized to delete message');
+        }
+        
+        await message.deleteOne();
+
+        return response(res, 200, "Message deleted successfully");
+    } catch (error) {
+         console.error('Error while delete real message message ', error);
+        return response(
+            res,
+            500,
+            'An internal server error occurred while deleting  messages'
+        );
+    }
+}

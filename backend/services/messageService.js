@@ -76,9 +76,10 @@ export const senderService = async (data, file) => {
 			conversation: conversation._id,
 			sender: senderId,
 			content: content || '',
+			messageStatus:'send',
 			messageType: messageType,
 			attachments: attachments,
-			seenBy: [], // Initially kisi ne nahi dekha
+			seenBy: [], 
 			isDeleted: false,
 			isEdited: false
 		});
@@ -89,6 +90,7 @@ export const senderService = async (data, file) => {
 		conversation.lastMessage = {
 			text: content || (file ? '📸 Media' : ''),
 			sender: senderId,
+			receiver: receiverId,
 			createdAt: new Date(),
 			messageId: message._id
 		};

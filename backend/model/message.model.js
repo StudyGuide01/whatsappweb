@@ -15,6 +15,7 @@ const messageSchema = new mongoose.Schema({
 
 	// Generic content field
 	content: { type: String, trim: true },
+	messageStatus: {type: String},
 
 	// Improved Media Handling
 	attachments: [

@@ -32,7 +32,8 @@ const conversationSchema = new mongoose.Schema({
 		messageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Message' }
 	},
 
-}, {
+}, 
+{
 	timestamps: true,
 	// Ensure we don't send __v to the frontend
 	toJSON: { virtuals: true, transform: (doc, ret) => { delete ret.__v; return ret; } }
