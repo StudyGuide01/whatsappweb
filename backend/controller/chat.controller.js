@@ -217,7 +217,7 @@ export const markAsRead = async (req, res) => {
 export const  deleteMessag = async(req, res)=>{
     try {
         const {messageId} =  req.params;
-        const {userId} = req.userId
+        const userId = req.userId
 
         const message = await MessageModel.findById(messageId);
         if(!message){

@@ -46,8 +46,8 @@ export const senderService = async (data, file) => {
 			const uploadFile = await cloudinaryService.uploadContentFile(file.path);
 
 		if (!uploadFile?.url) {
-  throw new Error('Failed to upload media');
-}
+             throw new Error('Failed to upload media');
+        }
 
 			// File type detect karo
 			let fileType = 'file';

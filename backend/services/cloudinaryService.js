@@ -93,6 +93,41 @@ try {
 	throw new Error(`Failed to upload file: ${error.message}`);
 }}
 
+async uploadStatusFile (filePath, options= {}) {
+try {
+	const defaultOptions = {
+		folder: 'status-files',
+		use_filename: true,
+		unique_filename: true,
+		overwrite: false,
+		resource_type: 'auto',
+	};
+
+	const uploadOptions = { ...defaultOptions, ...options };
+	const ext = path.extname(filePath).toLowerCase();
+		if (['.mp4', '.webm', '.ogg', '.mov'].includes(ext)) {
+			uploadOptions.resource_type = 'video';
+			uploadOptions.transformation = [{ quality: 'auto:good' }];
+		}
+
+	const result = await this.cloudinary.uploader.upload(filePath, uploadOptions);
+	await fs.unlink(filePath).catch(() => {});
+
+	return {
+		url: result.secure_url,
+		publicId: result.public_id,
+		format: result.format,
+		bytes: result.bytes,
+		resourceType: result.resource_type
+	};
+
+
+} catch (error) {
+	console.log(error);
+	throw new Error(`Failed to upload status file: ${error.message}`);
+}
+}
+
 // end content file upload method
 
 	async uploadFromBuffer(buffer, originalName, options = {}) {
