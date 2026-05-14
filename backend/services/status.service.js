@@ -39,6 +39,8 @@ export const statusCreateService = asyncHandler(async(data, file)=>{
           messageStatus: 'create'
      });
 
+     await status.save()
+
      const populateStatus = await StatusModel.findOne(status?._id)
      .populate('user', 'userName profile.picture')
      .populate('viewers', 'userName profile.picture').lean();
