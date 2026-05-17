@@ -43,7 +43,7 @@ app.use((req, res, next)=>{
 
 //set route middleware
 app.use('/api/auth', authRouter);
-app.use('/api/auth', profileRouter);
+app.use('/api/authProfile', profileRouter);
 app.use('/api/message', messageRouter);
 
 /* ----------- Middleware ---------------- */
