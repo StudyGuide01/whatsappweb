@@ -104,6 +104,17 @@ export const senderService = async (data, file) => {
 			.populate('replyTo')
 			.lean();
 
+			//Emit socket event for realtime
+			if(req.io && req.socketUserMap){
+				const receiverSocketId = req.socketUserMap.get(receiverId);
+				if(receiverSocketId){
+					req.io.to(receiverSocketId).emit('receive_message', populatedMessage);
+					message.messageStatus = 'delevered'
+					await message.save()
+				
+				}
+			}
+
 		return populatedMessage;
 
 

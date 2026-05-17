@@ -36,7 +36,8 @@ export const statusCreateService = asyncHandler(async(data, file)=>{
           user: userId,
           content: content,
           messageType: finalMessageType,
-          messageStatus: 'create'
+          messageStatus: 'create',
+          expiresAt
      });
 
      await status.save()
@@ -45,6 +46,16 @@ export const statusCreateService = asyncHandler(async(data, file)=>{
      .populate('user', 'userName profile.picture')
      .populate('viewers', 'userName profile.picture').lean();
 
+     //Emit Socket Events
+
+     if(req.io && req.socketUserMap){
+          //broadcast to all connecting users exept the creator
+          for(const [connectedUserId, socketId] of req.socketUserMap){
+               if(connectedUserId !== userId){
+                    req.io.to(socketId).emit('new_status', populateStatus)
+               }
+          }
+     }
      return populateStatus;
 
      

@@ -196,6 +196,23 @@ export const markAsRead = async (req, res) => {
             { $set: { messageStatus: 'read' } }
         );
 
+        //NOTIFY TO ORIGINAL SENNDER 
+
+        //Emit socket event for realtime
+			if(req.io && req.socketUserMap){
+				for(const message of messages){
+                    const senderSocketId = req.socketUserMap.get(message.senderId.toString());
+                    if(socketUserMap){
+                        const updatedMessage = {
+                            _id:message._id,
+                            messageStatus: 'read'
+                        };
+                        req.io.to(senderSocketId).emit('message_read',updatedMessage)
+                        await message.save()
+                    }
+                }
+			}
+
         // 3. Update unread count
         const readCount = messages.length;
 
@@ -229,6 +246,17 @@ export const  deleteMessag = async(req, res)=>{
         }
         
         await message.deleteOne();
+
+        //Emit socket event
+     //broadcast to all connecting users exept the creator
+         if(req.io && req.socketUserMap){
+        const receiverSocketId = req.socketUserMap.get(message.reciever.toString())
+        if(receiverSocketId){
+            req.io.to(receiverSocketId).emit('message_deleted', messageId)
+        }
+         }
+
+
 
         return response(res, 200, "Message deleted successfully");
     } catch (error) {

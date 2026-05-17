@@ -63,7 +63,25 @@ export const viewStatus = asyncHandler(async (req, res) => {
       .populate("user", "userName profile.picture")
       .populate("viewers", "userName profile.picture")
       .lean();
+      
+           //Emit Socket Events
 
+     if(req.io && req.socketUserMap){
+          //broadcast to all connecting users exept the creator
+         const statusOwnerSocketId = req.socketUserMap.get(status.user._id.toString())
+         if(statusOwnerSocketId){
+          const viewData = {
+            statusId,
+            viewerId:userId,
+            totalViewers:updatedStatus.viewers.length,
+            viewers:updatedStatus.viewers
+          }
+
+          req.io.to(statusOwnerSocketId).emit('status_view',viewData);
+        }else{
+          console.log('Status owner not connecteds');
+        }
+     }
     return response(res, 200, "Status viewed successfully", updatedStatus);
   } catch (error) {
     console.log("Status Controller While viewing status", error);
@@ -95,6 +113,17 @@ export const deleteStatus = asyncHandler(async (req, res) => {
 
     // 4. Status delete karein
     await StatusModel.findByIdAndDelete(statusId);
+
+    //Emit socket event
+     //broadcast to all connecting users exept the creator
+         if(req.io && req.socketUserMap){
+           for(const [connectedUserId, socketId] of req.socketUserMap){
+               if(connectedUserId !== userId){
+                    req.io.to(socketId).emit('status_deleted', statusId)
+               }
+          }
+         }
+
 
     return response(res, 200, "Status deleted successfully");
   } catch (error) {
