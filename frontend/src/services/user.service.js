@@ -26,3 +26,35 @@ try {
     throw error.response ? error.response.data : error.message
 }
 }
+
+export const checkUserAuth = async()=>{
+try {
+    const response = axiosInstance.get('/auth/check-auth');
+    if(response.data.status ==='success'){
+        return {isAuthenticated:true, user:response?.data?.data}
+    }else if(response.data.status === 'error'){
+        return {isAuthenticated:false}
+    }
+} catch (error) {
+    throw error.response ? error.response.data : error.message
+}
+}
+
+export const logoutUser = async()=>{
+try {
+    const response = axiosInstance.get('/auth/logout');
+    return response.data
+} catch (error) {
+    throw error.response ? error.response.data : error.message
+}
+}
+
+
+export const getAllUsers = async()=>{
+try {
+    const response = axiosInstance.get('/auth/get-allUser');
+    return response.data
+} catch (error) {
+    throw error.response ? error.response.data : error.message
+}
+}
