@@ -3,6 +3,19 @@ import countries from "@/utils/countrilies";
 import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/store/useUserStore";
+import { useForm } from "react-hook-form";
+
+
+const avatars = [
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Luna",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+];
+
 
 //schema to check validation of state using yup
 const loginValidationSchema = yup
@@ -50,8 +63,30 @@ const login = () => {
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [opt, setOtp] = useState(["", "", "", "", "", ""]);
   const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null)
+  const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
 
+  const [profilePictureFile,setProfilePictureFile] = useState(null);
+
+  const [error,setError] = useState("");
+  const navigate = useNavigate();
+  const {setUser} = useUserStore()
+
+  //register for credenstioals
+  const {register:loginRegister, handleSubmit:handleLoginSubmit,formState:{errors:loginErrors}} = useForm({
+    resolver:yupResolver(loginValidationSchema)
+  })
+
+  // register for otp
+  const {handleSubmit:handleOtpSubmit, formState:{errors:otpEerrors},setValue:setOtpValue} = useForm({
+    resolver:yupResolver(otpValidationSchema)
+  })
   return <div>Login</div>;
 };
+
+// register for profile 
+const {register:profileRegister, handleSubmit:handleProfileSubmit, formState:{errors:profileErrors},watch} = useForm({
+resolver:yupResolver(profileValidationSchema)
+})
 
 export default login;
