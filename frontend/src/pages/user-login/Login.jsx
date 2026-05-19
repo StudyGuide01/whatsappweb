@@ -33,6 +33,16 @@ const loginValidationSchema = yup
     },
   );
 
+//  otp validation function with yup
+const otpValidationSchema = yup.object().shape({
+  opt:yup.string().length(6,'Otp must be excatly 6 digit').required("Otp is required")
+});
+
+const profileValidationSchema = yup.object().shape({
+  userName: yup.string().required('username is required'),
+  agreed:yup.bool().oneOf([true],'You must agree to the terms')
+})
+
 const login = () => {
   const { step, userPhoneData, setStep, setUserPhoneData, resetLoginState } =
     useLoginStore();
