@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "@/store/useUserStore";
 import { useForm } from "react-hook-form";
+import useThemeStore from "@/store/themeStore";
 
 
 const avatars = [
@@ -71,6 +72,7 @@ const login = () => {
   const [error,setError] = useState("");
   const navigate = useNavigate();
   const {setUser} = useUserStore()
+  const {theme,setTheme} = useThemeStore()
 
   //register for credenstioals
   const {register:loginRegister, handleSubmit:handleLoginSubmit,formState:{errors:loginErrors}} = useForm({
@@ -88,5 +90,7 @@ const login = () => {
 const {register:profileRegister, handleSubmit:handleProfileSubmit, formState:{errors:profileErrors},watch} = useForm({
 resolver:yupResolver(profileValidationSchema)
 })
+
+
 
 export default login;
