@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useUserStore from "@/store/useUserStore";
 import { useForm } from "react-hook-form";
 import useThemeStore from "@/store/themeStore";
+import {motion} from 'framer-motion'
 
 
 const avatars = [
