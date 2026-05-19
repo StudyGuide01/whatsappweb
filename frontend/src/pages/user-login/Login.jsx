@@ -83,13 +83,25 @@ const login = () => {
   const {handleSubmit:handleOtpSubmit, formState:{errors:otpEerrors},setValue:setOtpValue} = useForm({
     resolver:yupResolver(otpValidationSchema)
   })
-  return <div>Login</div>;
-};
 
-// register for profile 
+
+  // register for profile 
 const {register:profileRegister, handleSubmit:handleProfileSubmit, formState:{errors:profileErrors},watch} = useForm({
 resolver:yupResolver(profileValidationSchema)
 })
+
+
+return (
+  <>
+<div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 bg-none' : 'bg-gradient-to-br from-green-400 to-blue-500'}`}>
+  {/* Aapka content yahan aayega */}
+</div>
+  
+  
+  </>
+)
+};
+
 
 
 
