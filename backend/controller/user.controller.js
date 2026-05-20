@@ -52,17 +52,23 @@ import UserModel from "../model/user.model.js";
 
 export const sendOTP = async (req, res) => {
 	try {
-		const { email, phoneNumber, countryCode } = req.body;
+		// const { email, phoneNumber, countryCode } = req.body;
+console.log(email)
 
-		if (!email && (!phoneNumber || !countryCode)) {
-			return response(res, 400, 'Please provide either an Email or Phone Number with Country Code.');
-		}
+		// if (!email && (!phoneNumber || !countryCode)) {
+		// 	return response(res, 400, 'Please provide either an Email or Phone Number with Country Code.');
+		// }
+
+		/* 
 
 		const result = await AuthService.handleLoginOtp({ email, phoneNumber, countryCode });
 
 		return response(res, 200, result.message, result.data);
 
+		*/
+
 	} catch (error) {
+		console.log('Error while loging')
 		console.error('OTP Controller Error:', error);
 		const status = error.statusCode || 500;
 		return response(res, status, error.message || 'Internal Server Error');

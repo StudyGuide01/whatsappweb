@@ -1,0 +1,119 @@
+====================== for login page ==============================================
+import useLoginStore from "@/store/useLoginStore";
+import countries from "@/utils/countrilies";
+import React, { useState } from "react";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/store/useUserStore";
+import { useForm } from "react-hook-form";
+import useThemeStore from "@/store/themeStore";
+import {motion} from 'framer-motion'
+
+
+const avatars = [
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Luna",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+];
+
+
+//schema to check validation of state using yup
+const loginValidationSchema = yup
+  .object()
+  .shape({
+    phoneNumber: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .matches(/^\d+$/, "phone number must be digit")
+      .transform((value, originalValue) => {
+        originalValue.trim() === "" ? null : value;
+      }),
+    email: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .email("pelase enter valid email")
+      .transform((value, originalValue) => {
+        originalValue.trim() === "" ? null : value;
+      }),
+  })
+  .test(
+    "at-least-one",
+    "Either email or phoneNumber is required",
+    function (value) {
+      return !!(value.phoneNumber || value.email);
+    },
+  );
+
+//  otp validation function with yup
+const otpValidationSchema = yup.object().shape({
+  opt:yup.string().length(6,'Otp must be excatly 6 digit').required("Otp is required")
+});
+
+const profileValidationSchema = yup.object().shape({
+  userName: yup.string().required('username is required'),
+  agreed:yup.bool().oneOf([true],'You must agree to the terms')
+})
+
+const login = () => {
+  const { step, userPhoneData, setStep, setUserPhoneData, resetLoginState } =
+    useLoginStore();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+  const [opt, setOtp] = useState(["", "", "", "", "", ""]);
+  const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null)
+  const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
+
+  const [profilePictureFile,setProfilePictureFile] = useState(null);
+
+  const [error,setError] = useState("");
+  const navigate = useNavigate();
+  const {setUser} = useUserStore()
+  const {theme,setTheme} = useThemeStore()
+
+  //register for credenstioals
+  const {register:loginRegister, handleSubmit:handleLoginSubmit,formState:{errors:loginErrors}} = useForm({
+    resolver:yupResolver(loginValidationSchema)
+  })
+
+  // register for otp
+  const {handleSubmit:handleOtpSubmit, formState:{errors:otpEerrors},setValue:setOtpValue} = useForm({
+    resolver:yupResolver(otpValidationSchema)
+  })
+
+
+  // register for profile 
+const {register:profileRegister, handleSubmit:handleProfileSubmit, formState:{errors:profileErrors},watch} = useForm({
+resolver:yupResolver(profileValidationSchema)
+})
+
+
+return (
+  <>
+<div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 bg-none' : 'bg-gradient-to-br from-green-400 to-blue-500'}`}>
+  {/* Aapka content yahan aayega */}
+
+  <motion.div
+  initial={{opacity:0,y:-50}}
+  animate={{opacity:1,y:0}}
+  transition={{duration:0.5}}
+  className={`${theme ==='dark'? 'bg-gray-500 text-white': 'bg-white'}`}
+  >
+
+  </motion.div>
+</div>
+  
+  
+  </>
+)
+};
+
+
+
+
+export default login;
